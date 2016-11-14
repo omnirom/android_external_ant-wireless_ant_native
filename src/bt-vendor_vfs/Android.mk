@@ -20,7 +20,7 @@ LOCAL_CFLAGS := -g -c -W -Wall -O2
 
 # needed to pull in the header file for libbt-vendor.so
 BDROID_DIR:= system/bt
-QCOM_DIR:= $(call project-path-for,bt-vendor)
+QCOM_DIR:= hardware/qcom/bt
 
 # Added hci/include to give access to the header for the libbt-vendorso interface.
 LOCAL_C_INCLUDES := \
@@ -34,6 +34,11 @@ LOCAL_C_INCLUDES += \
    $(QCOM_DIR)/msm8992/libbt-vendor/include
 endif
 
+ifneq ($(filter caf-msm8916 caf-msm8992 caf-msm8996,$(TARGET_QCOM_BLUETOOTH_VARIANT)),)
+LOCAL_C_INCLUDES += \
+   $(QCOM_DIR)/$(TARGET_QCOM_BLUETOOTH_VARIANT)/libbt-vendor/include
+endif
+    
 ifeq ($(BOARD_ANT_WIRELESS_DEVICE),"qualcomm-uart")
 LOCAL_C_INCLUDES += \
    $(LOCAL_PATH)/$(ANT_DIR)/qualcomm/uart \
