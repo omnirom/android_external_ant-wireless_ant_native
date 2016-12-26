@@ -29,16 +29,19 @@ LOCAL_C_INCLUDES := \
    $(BDROID_DIR)/hci/include \
    $(QCOM_DIR)/libbt-vendor/include
 
-ifneq ($(filter msm8994 msm8992,$(TARGET_BOARD_PLATFORM)),)
-LOCAL_C_INCLUDES += \
-   $(QCOM_DIR)/msm8992/libbt-vendor/include
-endif
 
+ifneq ($(TARGET_QCOM_BLUETOOTH_VARIANT),)
 ifneq ($(filter caf-msm8916 caf-msm8992 caf-msm8996,$(TARGET_QCOM_BLUETOOTH_VARIANT)),)
 LOCAL_C_INCLUDES += \
    $(QCOM_DIR)/$(TARGET_QCOM_BLUETOOTH_VARIANT)/libbt-vendor/include
 endif
-    
+else
+ifneq ($(filter msm8994 msm8992,$(TARGET_BOARD_PLATFORM)),)
+LOCAL_C_INCLUDES += \
+   $(QCOM_DIR)/msm8992/libbt-vendor/include
+endif
+endif
+
 ifeq ($(BOARD_ANT_WIRELESS_DEVICE),"qualcomm-uart")
 LOCAL_C_INCLUDES += \
    $(LOCAL_PATH)/$(ANT_DIR)/qualcomm/uart \
