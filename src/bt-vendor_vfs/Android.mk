@@ -31,7 +31,7 @@ LOCAL_C_INCLUDES := \
 
 
 ifneq ($(TARGET_QCOM_BLUETOOTH_VARIANT),)
-ifneq ($(filter caf-msm8916 caf-msm8992 caf-msm8996,$(TARGET_QCOM_BLUETOOTH_VARIANT)),)
+ifneq ($(filter caf-msm8916 caf-msm8992 caf-msm8996 caf-msm8998,$(TARGET_QCOM_BLUETOOTH_VARIANT)),)
 LOCAL_C_INCLUDES += \
    $(QCOM_DIR)/$(TARGET_QCOM_BLUETOOTH_VARIANT)/libbt-vendor/include
 endif
