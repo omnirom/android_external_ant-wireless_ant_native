@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2009 Dynastream Innovations
+# Copyright (C) 2011 Dynastream Innovations
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -18,50 +18,55 @@ include $(CLEAR_VARS)
 
 LOCAL_CFLAGS := -g -c -W -Wall -O2
 
-# Check which chip is used so correct values in messages
-ifeq ($(BOARD_ANT_WIRELESS_DEVICE),"wl12xx")
-LOCAL_CFLAGS += -DBOARD_ANT_DEVICE_WL12XX
-else ifeq ($(BOARD_ANT_WIRELESS_DEVICE),"bcm433x")
-LOCAL_CFLAGS += -DBOARD_ANT_DEVICE_BCM433X
-endif
+# needed to pull in the header file for libbt-vendor.so
+BDROID_DIR:= system/bt
+HWBINDER_DIR := system/hwbinder
+QCOM_DIR:= hardware/qcom/bt/libbt-vendor
 
+# Added hci/include to give access to the header for the libbt-vendorso interface.
 LOCAL_C_INCLUDES := \
    $(LOCAL_PATH)/src/common/inc \
    $(LOCAL_PATH)/$(ANT_DIR)/inc \
-   system/bluetooth/bluez-clean-headers
+   $(BDROID_DIR)/hci/include \
+   $(QCOM_DIR)/include \
+   $(HWBINDER_DIR)/include
 
-ifeq ($(BOARD_ANT_WIRELESS_POWER),"bluedroid")
-LOCAL_CFLAGS += \
-   -DBOARD_HAVE_ANT_WIRELESS \
-   -DUSE_EXTERNAL_POWER_LIBRARY
 
-LOCAL_C_INCLUDES += system/bluetooth/bluedroid/include/bluedroid
-endif # BOARD_ANT_WIRELESS_POWER = bluedroid
+ifeq ($(BOARD_ANT_WIRELESS_DEVICE),"qualcomm-hidl")
+LOCAL_C_INCLUDES += \
+   $(LOCAL_PATH)/$(ANT_DIR)/qualcomm/hidl
+
+endif # BOARD_ANT_WIRELESS_DEVICE = "qualcomm-hidl"
 
 LOCAL_SRC_FILES := \
-   $(COMMON_DIR)/JAntNative.cpp \
    $(COMMON_DIR)/ant_utils.c \
-   $(ANT_DIR)/ant_native_hci.c \
-   $(ANT_DIR)/ant_rx.c \
-   $(ANT_DIR)/ant_tx.c
+   $(ANT_DIR)/ant_native_chardev.c \
+   $(ANT_DIR)/ant_rx_chardev.c \
+   $(ANT_DIR)/AntHidlClient.cpp
+
+LOCAL_SRC_FILES += $(COMMON_DIR)/JAntNative.cpp
+
 
 # JNI
 LOCAL_C_INCLUDE += $(JNI_H_INCLUDE)
 
 LOCAL_SHARED_LIBRARIES += \
-   libnativehelper
+   libnativehelper \
+   libbase \
+   libhidlbase \
+   libhidltransport \
+   libhwbinder \
+   libutils \
+   com.qualcomm.qti.ant@1.0 \
+   android.hardware.bluetooth@1.0 \
 
-# chip power
-LOCAL_SHARED_LIBRARIES += \
-   libbluedroid
-
-# logging
+# logging and dll loading
 LOCAL_SHARED_LIBRARIES += \
    libcutils \
+   libdl \
    liblog
 
 LOCAL_MODULE_TAGS := optional
 LOCAL_MODULE := libantradio
 
 include $(BUILD_SHARED_LIBRARY)
-

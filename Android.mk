@@ -52,6 +52,10 @@ else ifeq ($(BOARD_ANT_WIRELESS_DEVICE),"qualcomm-uart")
 
 ANT_DIR := src/bt-vendor_vfs
 
+else ifeq ($(BOARD_ANT_WIRELESS_DEVICE),"qualcomm-hidl")
+
+ANT_DIR := src/qcomm-hidl
+
 else ifeq ($(BOARD_ANT_WIRELESS_DEVICE),"vfs-prerelease")
 
 ANT_DIR := src/vfs
@@ -75,6 +79,8 @@ include $(CLEAR_VARS)
 LOCAL_C_INCLUDES:= \
 	$(LOCAL_PATH)/src/common/inc \
 	$(LOCAL_PATH)/app
+
+LOCAL_C_INCLUDES += frameworks/base/core/jni/include
 
 LOCAL_CFLAGS:= -g -c -W -Wall -O2
 
