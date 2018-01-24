@@ -14,6 +14,7 @@
 # limitations under the License.
 #
 
+ifneq ($(TARGET_USES_PREBUILT_ANT),true)
 ifneq ($(BOARD_ANT_WIRELESS_DEVICE),)
 
 LOCAL_PATH := $(call my-dir)
@@ -75,28 +76,6 @@ include $(LOCAL_PATH)/$(ANT_DIR)/Android.mk
 #
 
 
-include $(CLEAR_VARS)
-
-LOCAL_C_INCLUDES:= \
-	$(LOCAL_PATH)/src/common/inc \
-	$(LOCAL_PATH)/app
-
-LOCAL_C_INCLUDES += frameworks/base/core/jni/include
-
-LOCAL_CFLAGS:= -g -c -W -Wall -O2
-
-LOCAL_SRC_FILES:= \
-	app/ant_app.c
-
-LOCAL_SHARED_LIBRARIES := \
-	libantradio \
-	libcutils
-
-LOCAL_MODULE_PATH := $(TARGET_OUT_OPTIONAL_EXECUTABLES)
-LOCAL_MODULE_TAGS := optional
-LOCAL_MODULE := antradio_app
-
-include $(BUILD_EXECUTABLE)
-
 
 endif # BOARD_ANT_WIRELESS_DEVICE defined
+endif #
