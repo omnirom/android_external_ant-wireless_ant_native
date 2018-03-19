@@ -18,6 +18,9 @@ ifneq ($(QCPATH),)
 include $(CLEAR_VARS)
 
 LOCAL_CFLAGS := -g -c -W -Wall -O2
+LOCAL_CFLAGS += -Wno-unused-variable
+LOCAL_CFLAGS += -Wno-unused-parameter
+LOCAL_CFLAGS += -Wno-unused-label
 
 # needed to pull in the header file for libbt-vendor.so
 BDROID_DIR:= system/bt
